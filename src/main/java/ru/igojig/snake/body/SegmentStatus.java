@@ -5,12 +5,12 @@ import java.awt.*;
 public enum SegmentStatus {
     SNAKE_BODY(Color.GRAY),
     SNAKE_HEAD(Color.BLUE),
-    SNAKE_END(Color.DARK_GRAY);
+    SNAKE_TAIL(Color.DARK_GRAY);
 
     HeadStatus headStatus;
 
 
-    Color color;
+    final Color color;
 
     SegmentStatus(Color color){
         this.color=color;

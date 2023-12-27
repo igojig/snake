@@ -3,7 +3,7 @@ package ru.igojig;
 
 
 import ru.igojig.snake.MoveStatus;
-import ru.igojig.snake.Snake;
+import ru.igojig.snake.Game;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent;
 
 public class Window extends JFrame implements Runnable {
 
-    Snake snake;
+    Game game;
     JPanel panel;
     JPanel panelInfo;
     JLabel labelInfo;
@@ -22,7 +22,7 @@ public class Window extends JFrame implements Runnable {
 
     public Window() {
 //        super();
-        snake = new Snake(Main.X, Main.Y, Main.SNAKE_LENGTH, Main.FOOD_COUNT, Main.BOMB_COUNT);
+        game = new Game(Main.WIDTH, Main.HEIGHT, Main.SNAKE_LENGTH, Main.FOOD_COUNT, Main.BOMB_COUNT);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class Window extends JFrame implements Runnable {
     }
 
     void restart() {
-        snake.restart(Main.X, Main.Y, Main.SNAKE_LENGTH, Main.FOOD_COUNT, Main.BOMB_COUNT);
+        game.restart(Main.WIDTH, Main.HEIGHT, Main.SNAKE_LENGTH, Main.FOOD_COUNT, Main.BOMB_COUNT);
         timer.setDelay(Main.DELAY);
     }
 
@@ -44,24 +44,24 @@ public class Window extends JFrame implements Runnable {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
 
-                Color c = snake.getBombStatus().getColor();
+                Color c = game.getBombStatus().getColor();
                 g.setColor(c);
-                snake.getBombs().forEach(o -> {
+                game.getBombs().forEach(o -> {
 
                     int x = o.getX();
                     int y = o.getY();
 
-                    g.fillOval(x * Main.SIZE, y * Main.SIZE, Main.SIZE, Main.SIZE);
+                    g.fillOval(x * Main.IMAGE_SIZE, y * Main.IMAGE_SIZE, Main.IMAGE_SIZE, Main.IMAGE_SIZE);
                 });
 
-                c = snake.getFoodStatus().getColor();
+                c = game.getFoodStatus().getColor();
                 g.setColor(c);
-                snake.getFoods().forEach(o -> {
+                game.getFoods().forEach(o -> {
 
                     int x = o.getX();
                     int y = o.getY();
 
-                    g.fillOval(x * Main.SIZE, y * Main.SIZE, Main.SIZE, Main.SIZE);
+                    g.fillOval(x * Main.IMAGE_SIZE, y * Main.IMAGE_SIZE, Main.IMAGE_SIZE, Main.IMAGE_SIZE);
                 });
 
 //
@@ -77,14 +77,14 @@ public class Window extends JFrame implements Runnable {
 //                });
 
 
-                snake.getSnakeBody().forEach(o -> {
+                game.getSnakeBody().forEach(o -> {
                     Color color = o.getSegmentStatus().getColor();
 //                    SegmentStatus statutus = segment.getSegmentStatus();
                     int x = o.getX();
                     int y = o.getY();
 
                     g.setColor(color);
-                    g.fillRect(x * Main.SIZE, y * Main.SIZE, Main.SIZE, Main.SIZE);
+                    g.fillRect(x * Main.IMAGE_SIZE, y * Main.IMAGE_SIZE, Main.IMAGE_SIZE, Main.IMAGE_SIZE);
                 });
 
 //
@@ -100,11 +100,11 @@ public class Window extends JFrame implements Runnable {
 //                });
 
                 g.setColor(Color.WHITE);
-                for (int i = 1; i < Main.X; i++) {
-                    g.drawLine((Main.SIZE * i), 0, Main.SIZE * i, Main.SIZE * Main.Y);
+                for (int i = 1; i < Main.WIDTH; i++) {
+                    g.drawLine((Main.IMAGE_SIZE * i), 0, Main.IMAGE_SIZE * i, Main.IMAGE_SIZE * Main.HEIGHT);
                 }
-                for (int i = 1; i < Main.Y; i++) {
-                    g.drawLine(0, Main.SIZE * i, Main.SIZE * Main.X, Main.SIZE * i);
+                for (int i = 1; i < Main.HEIGHT; i++) {
+                    g.drawLine(0, Main.IMAGE_SIZE * i, Main.IMAGE_SIZE * Main.WIDTH, Main.IMAGE_SIZE * i);
                 }
 
 
@@ -113,14 +113,14 @@ public class Window extends JFrame implements Runnable {
 
         };
 
-        panel.setPreferredSize(new Dimension(Main.X * Main.SIZE, Main.Y * Main.SIZE));
+        panel.setPreferredSize(new Dimension(Main.WIDTH * Main.IMAGE_SIZE, Main.HEIGHT * Main.IMAGE_SIZE));
 
         panel.setBackground(Color.GREEN);
         add(panel);
 
         panelInfo = new JPanel(new FlowLayout());
         labelInfo = new JLabel();
-        labelInfo.setText("Length #" + snake.getSnake_length());
+        labelInfo.setText("Length #" + game.getSnake_length());
         panelInfo.add(labelInfo);
         add(panelInfo, BorderLayout.SOUTH);
     }
@@ -129,18 +129,18 @@ public class Window extends JFrame implements Runnable {
         timer = new Timer(Main.DELAY, e -> {
 //                System.out.println("timer");
 
-            snake.move();
+            game.move();
 
             Window.this.repaint();
-            labelInfo.setText("Length #" + snake.getSnake_length());
+            labelInfo.setText("Length #" + game.getSnake_length());
             int answer = -1;
 
-            switch (snake.getGameStatus()) {
+            switch (game.getGameStatus()) {
                 case BOMBED:
                 case SELF_EATED:
-                case OUT_OF_ARAE:
+                case OUT_OF_AREA:
 //                        JOptionPane.showMessageDialog(panel, snake.getGameStatus().getStatus());
-                    answer = JOptionPane.showConfirmDialog(panel, snake.getGameStatus() + "\nНачать заново?", "Snake", JOptionPane.YES_NO_OPTION);
+                    answer = JOptionPane.showConfirmDialog(panel, game.getGameStatus() + "\nНачать заново?", "Snake", JOptionPane.YES_NO_OPTION);
 
                     switch (answer) {
                         case JOptionPane.YES_OPTION:
@@ -170,16 +170,16 @@ public class Window extends JFrame implements Runnable {
                 super.keyPressed(e);
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_UP:
-                        snake.setCurrentMoveStatus(MoveStatus.UP);
+                        game.setCurrentMoveStatus(MoveStatus.UP);
                         break;
                     case KeyEvent.VK_DOWN:
-                        snake.setCurrentMoveStatus(MoveStatus.DOWN);
+                        game.setCurrentMoveStatus(MoveStatus.DOWN);
                         break;
                     case KeyEvent.VK_LEFT:
-                        snake.setCurrentMoveStatus(MoveStatus.LEFT);
+                        game.setCurrentMoveStatus(MoveStatus.LEFT);
                         break;
                     case KeyEvent.VK_RIGHT:
-                        snake.setCurrentMoveStatus(MoveStatus.RIGHT);
+                        game.setCurrentMoveStatus(MoveStatus.RIGHT);
                         break;
 
                 }

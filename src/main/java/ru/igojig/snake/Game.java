@@ -4,19 +4,19 @@ package ru.igojig.snake;
 
 import ru.igojig.snake.body.BodyCell;
 import ru.igojig.snake.body.HeadStatus;
-import ru.igojig.snake.body.SnakeBody;
+import ru.igojig.snake.body.Snake;
 import ru.igojig.snake.field.Bomb;
-import ru.igojig.snake.field.FieldStatus;
+import ru.igojig.snake.field.Box;
 import ru.igojig.snake.field.Food;
 
 import java.util.List;
 
-public class Snake {
+public class Game {
     MoveStatus currentMoveStatus;
 
     Bomb bombs;
     Food foods;
-    SnakeBody snakeBody;
+    Snake snake;
 
     GameStatus gameStatus;
 
@@ -29,7 +29,7 @@ public class Snake {
     boolean isEated=false;
 
 
-    public Snake(int max_x, int max_y, int snake_length, int foodCount, int bombCount) {
+    public Game(int max_x, int max_y, int snake_length, int foodCount, int bombCount) {
 
 
        restart(max_x, max_y, snake_length, foodCount, bombCount);
@@ -40,7 +40,7 @@ public class Snake {
         gameStatus = GameStatus.PLAYED;
         currentMoveStatus = MoveStatus.RIGHT;
 
-        snakeBody = new SnakeBody(snake_length, max_x, max_y);
+        snake = new Snake(snake_length, max_x, max_y);
         bombs = new Bomb(max_x, max_y, bombCount);
         foods = new Food(max_x, max_y, foodCount);
 
@@ -53,13 +53,13 @@ public class Snake {
 
 
 
-        bombs.fillData(snakeBody);
-        foods.fillData(snakeBody, bombs);
+        bombs.fillData(snake);
+        foods.fillData(snake, bombs);
     }
 
 
     public List<BodyCell> getSnakeBody() {
-        return snakeBody.getSnakeList();
+        return snake.getSnakeList();
     }
 
     public List<Coord> getBombs() {
@@ -70,11 +70,11 @@ public class Snake {
         return foods.getWorkField();
     }
 
-    public FieldStatus getBombStatus() {
+    public Box getBombStatus() {
         return bombs.getFieldStatus();
     }
 
-    public FieldStatus getFoodStatus() {
+    public Box getFoodStatus() {
         return foods.getFieldStatus();
     }
 
@@ -85,10 +85,10 @@ public class Snake {
     public void move() {
 
         switch (currentMoveStatus) {
-            case UP -> snakeBody.moveUp();
-            case DOWN -> snakeBody.moveDown();
-            case LEFT -> snakeBody.moveLeft();
-            case RIGHT -> snakeBody.moveRight();
+            case UP -> snake.moveUp();
+            case DOWN -> snake.moveDown();
+            case LEFT -> snake.moveLeft();
+            case RIGHT -> snake.moveRight();
         }
 
 
@@ -96,34 +96,34 @@ public class Snake {
 
         HeadStatus headStatus = HeadStatus.NORMAL;
 
-        if (!snakeBody.isInsideArea())
-            gameStatus = GameStatus.OUT_OF_ARAE;
+        if (!snake.isInsideArea())
+            gameStatus = GameStatus.OUT_OF_AREA;
 
-        if (snakeBody.isBombed(bombs)) {
+        if (snake.isBombed(bombs)) {
             gameStatus = GameStatus.BOMBED;
             headStatus = HeadStatus.BOMBED;
         }
 //            bombed=true;
 
 
-        if (snakeBody.isSelfEat()) {
+        if (snake.isSelfEat()) {
             gameStatus = GameStatus.SELF_EATED;
             headStatus = HeadStatus.SELF_EATED;
         }
 
-        if (snakeBody.isFindFood((foods))) {
-            foods.removeCell(snakeBody.getNewHead());
-            foods.generateGameObject(snakeBody, foods, bombs);
-            snakeBody.increaseLength();
+        if (snake.isFindFood((foods))) {
+            foods.removeCell(snake.getNewHead());
+            foods.generateGameObject(snake, foods, bombs);
+            snake.increaseLength();
             isEated=true;
             headStatus = HeadStatus.EATED;
         } else {
-            snakeBody.moveEndOfSnake();
+            snake.moveEndOfSnake();
             isEated=false;
         }
 
-        snakeBody.moveHeadOfSnake();
-        snakeBody.setHeadStatus(headStatus);
+        snake.moveHeadOfSnake();
+        snake.setHeadStatus(headStatus);
 
 
 
@@ -141,7 +141,7 @@ public class Snake {
     }
 
     public int getSnake_length() {
-        return snakeBody.getSnakeLength();
+        return snake.getSnakeLength();
     }
 
 //    public List<BodyCell> getSnake(){

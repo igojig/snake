@@ -3,7 +3,7 @@ package ru.igojig.snake.field;
 
 
 import ru.igojig.snake.Coord;
-import ru.igojig.snake.body.SnakeBody;
+import ru.igojig.snake.body.Snake;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,21 +17,21 @@ import java.util.concurrent.ThreadLocalRandom;
 
     int data_count;
 
-    FieldStatus fieldStatus;
+    Box box;
 
     List<Coord> workField;
 
-    FieldObject(int max_x, int max_y, int data_count, FieldStatus fieldStatus){
+    FieldObject(int max_x, int max_y, int data_count, Box box){
 
-        restart(max_x, max_y, data_count, fieldStatus);
+        restart(max_x, max_y, data_count, box);
     }
 
-    void restart(int max_x, int max_y, int data_count, FieldStatus fieldStatus){
+    void restart(int max_x, int max_y, int data_count, Box box){
         workField=new ArrayList<>();
         this.max_x=max_x;
         this.max_y=max_y;
         this.data_count=data_count;
-        this.fieldStatus=fieldStatus;
+        this.box = box;
 
     }
 
@@ -45,20 +45,20 @@ import java.util.concurrent.ThreadLocalRandom;
         return workField.stream().noneMatch(obj->obj.getX()==x && obj.getY()==y);
     }
 
-    public void fillData(SnakeBody snakeBody, FieldObject... fieldObjects){
+    public void fillData(Snake snake, FieldObject... fieldObjects){
         int i=0;
         while (i<data_count){
-                generateGameObject(snakeBody, fieldObjects);
+                generateGameObject(snake, fieldObjects);
                 i++;
             }
         }
 
 
-    public void generateGameObject(SnakeBody snakeBody, FieldObject... fieldObjects){
+    public void generateGameObject(Snake snake, FieldObject... fieldObjects){
         while (true){
             int x= ThreadLocalRandom.current().nextInt(max_x);
             int y=ThreadLocalRandom.current().nextInt(max_y);
-            if( snakeBody.isEmpty(x, y)
+            if( snake.isEmpty(x, y)
                     && Arrays.stream(fieldObjects).allMatch(o->o.isEmpty(x,y))){
                 workField.add(new Coord(x,y));
                 break;
@@ -71,8 +71,8 @@ import java.util.concurrent.ThreadLocalRandom;
         workField.removeIf(o->o.equals(coord));
     }
 
-    public FieldStatus getFieldStatus(){
-        return fieldStatus;
+    public Box getFieldStatus(){
+        return box;
     }
 
 

@@ -1,10 +1,35 @@
 package ru.igojig.snake.field;
 
-public class Bomb extends FieldObject
+import lombok.Getter;
+import ru.igojig.Main;
+import ru.igojig.snake.Coord;
+
+import java.util.List;
+
+public class Bomb
 {
 
-    public Bomb(int max_x, int max_y, int data_count) {
-        super(max_x, max_y, data_count, FieldStatus.BOMB);
+    @Getter
+    private List<Coord> bombsList;
+
+    public Bomb(int col, int row, int bombsCount) {
+
+    }
+
+    public void setRandomBombs(int bombsCount){
+        int count=0;
+        while (count<bombsCount){
+            Coord randomCoord = Coord.getRandomCoord(Main.WIDTH, Main.HEIGHT);
+            if(bombsList.stream().noneMatch(c->c.equals(randomCoord))){
+                bombsList.add(randomCoord);
+                count++;
+            }
+        }
+    }
+
+    public boolean isOccupied(Coord coord){
+        return bombsList.stream()
+                .anyMatch(c->c.equals(coord));
     }
 
 
