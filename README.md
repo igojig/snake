@@ -1,6 +1,6 @@
 ## Игра "Змейка"
 <p align="center">
-    <img src="./assets/demo.png" width="50%" height="50%"/>
+    <img src="./assets/demo.png" width="60%" height="60%"/>
 </p>
 
 ### Установка
