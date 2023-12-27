@@ -123,7 +123,7 @@ public class Snake {
         }
 
         snakeBody.moveHeadOfSnake();
-        snakeBody.setHeadStatus(headStatus);
+//        snakeBody.setHeadStatus(headStatus);
 
 
 

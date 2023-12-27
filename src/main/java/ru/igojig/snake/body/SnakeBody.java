@@ -4,6 +4,7 @@ package ru.igojig.snake.body;
 
 import ru.igojig.snake.Coord;
 import ru.igojig.snake.field.FieldObject;
+import ru.igojig.snake.field.FieldStatus;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -40,10 +41,10 @@ public class SnakeBody {
         int x = max_x_size / 2 - snake_length / 2;
 
         for (int i = 0; i < snake_length; i++) {
-            snake_list.add(new BodyCell(x + i, y, SegmentStatus.SNAKE_BODY));
+            snake_list.add(new BodyCell(x + i, y, FieldStatus.SNAKE_BODY));
         }
-        snake_list.getLast().segmentStatus = SegmentStatus.SNAKE_HEAD;
-        snake_list.getFirst().segmentStatus = SegmentStatus.SNAKE_END;
+        snake_list.getLast().segmentStatus = FieldStatus.SNAKE_HEAD;
+        snake_list.getFirst().segmentStatus = FieldStatus.SNAKE_TAIL;
 
 
         new_y = y;
@@ -78,9 +79,9 @@ public class SnakeBody {
     }
 
     public void moveHeadOfSnake() {
-        snake_list.getLast().segmentStatus = SegmentStatus.SNAKE_BODY;
-        snake_list.add(new BodyCell(new_x, new_y, SegmentStatus.SNAKE_HEAD));
-        snake_list.element().segmentStatus = SegmentStatus.SNAKE_END;
+        snake_list.getLast().segmentStatus = FieldStatus.SNAKE_BODY;
+        snake_list.add(new BodyCell(new_x, new_y, FieldStatus.SNAKE_HEAD));
+        snake_list.element().segmentStatus = FieldStatus.SNAKE_TAIL;
 
     }
 
@@ -118,8 +119,8 @@ public class SnakeBody {
         return snake_length;
     }
 
-    public void setHeadStatus(HeadStatus headStatus) {
-        snake_list.getLast().segmentStatus.setHeadStatus(headStatus);
-    }
+//    public void setHeadStatus(HeadStatus headStatus) {
+//        snake_list.getLast().segmentStatus.setHeadStatus(headStatus);
+//    }
 
 }

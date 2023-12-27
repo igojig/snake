@@ -44,24 +44,27 @@ public class Window extends JFrame implements Runnable {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
 
-                Color c = snake.getBombStatus().getColor();
-                g.setColor(c);
+//                Image image = snake.getBombStatus().getImage();
+//                g.setColor(c);
                 snake.getBombs().forEach(o -> {
 
                     int x = o.getX();
                     int y = o.getY();
 
-                    g.fillOval(x * Main.SIZE, y * Main.SIZE, Main.SIZE, Main.SIZE);
+                    g.drawImage(snake.getBombStatus().getImage(), x* Main.IMAGE_SIZE, y*Main.IMAGE_SIZE, this);
+
+//                    g.fillOval(x * Main.IMAGE_SIZE, y * Main.IMAGE_SIZE, Main.IMAGE_SIZE, Main.IMAGE_SIZE);
                 });
 
-                c = snake.getFoodStatus().getColor();
-                g.setColor(c);
+//                image = snake.getFoodStatus().getImage();
+//                g.setColor(c);
                 snake.getFoods().forEach(o -> {
 
                     int x = o.getX();
                     int y = o.getY();
 
-                    g.fillOval(x * Main.SIZE, y * Main.SIZE, Main.SIZE, Main.SIZE);
+//                    g.fillOval(x * Main.IMAGE_SIZE, y * Main.IMAGE_SIZE, Main.IMAGE_SIZE, Main.IMAGE_SIZE);
+                    g.drawImage(snake.getFoodStatus().getImage(), x*Main.IMAGE_SIZE, y*Main.IMAGE_SIZE, this);
                 });
 
 //
@@ -78,13 +81,14 @@ public class Window extends JFrame implements Runnable {
 
 
                 snake.getSnakeBody().forEach(o -> {
-                    Color color = o.getSegmentStatus().getColor();
+                    Image image = o.getSegmentStatus().getImage();
 //                    SegmentStatus statutus = segment.getSegmentStatus();
                     int x = o.getX();
                     int y = o.getY();
 
-                    g.setColor(color);
-                    g.fillRect(x * Main.SIZE, y * Main.SIZE, Main.SIZE, Main.SIZE);
+//                    g.setColor(color);
+//                    g.fillRect(x * Main.IMAGE_SIZE, y * Main.IMAGE_SIZE, Main.IMAGE_SIZE, Main.IMAGE_SIZE);
+                    g.drawImage(image, x*Main.IMAGE_SIZE, y*Main.IMAGE_SIZE, this);
                 });
 
 //
@@ -101,10 +105,10 @@ public class Window extends JFrame implements Runnable {
 
                 g.setColor(Color.WHITE);
                 for (int i = 1; i < Main.X; i++) {
-                    g.drawLine((Main.SIZE * i), 0, Main.SIZE * i, Main.SIZE * Main.Y);
+                    g.drawLine((Main.IMAGE_SIZE * i), 0, Main.IMAGE_SIZE * i, Main.IMAGE_SIZE * Main.Y);
                 }
                 for (int i = 1; i < Main.Y; i++) {
-                    g.drawLine(0, Main.SIZE * i, Main.SIZE * Main.X, Main.SIZE * i);
+                    g.drawLine(0, Main.IMAGE_SIZE * i, Main.IMAGE_SIZE * Main.X, Main.IMAGE_SIZE * i);
                 }
 
 
@@ -113,9 +117,9 @@ public class Window extends JFrame implements Runnable {
 
         };
 
-        panel.setPreferredSize(new Dimension(Main.X * Main.SIZE, Main.Y * Main.SIZE));
+        panel.setPreferredSize(new Dimension(Main.X * Main.IMAGE_SIZE, Main.Y * Main.IMAGE_SIZE));
 
-        panel.setBackground(Color.GREEN);
+        panel.setBackground(Color.GRAY);
         add(panel);
 
         panelInfo = new JPanel(new FlowLayout());

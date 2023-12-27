@@ -2,27 +2,28 @@ package ru.igojig.snake.body;
 
 
 import ru.igojig.snake.Coord;
+import ru.igojig.snake.field.FieldStatus;
 
 public class BodyCell extends Coord {
-    SegmentStatus segmentStatus;
+    FieldStatus segmentStatus;
 
     BodyCell(int x, int y){
         super(x,y);
-        segmentStatus=SegmentStatus.SNAKE_BODY;
+        segmentStatus=FieldStatus.SNAKE_BODY;
     }
 
-    BodyCell(int x, int y, SegmentStatus segmentStatus){
+    BodyCell(int x, int y, FieldStatus segmentStatus){
         super(x,y);
         this.segmentStatus=segmentStatus;
 
     }
 
-    BodyCell(Coord coord, SegmentStatus segmentStatus){
+    BodyCell(Coord coord, FieldStatus segmentStatus){
         super(coord);
         this.segmentStatus=segmentStatus;
     }
 
-    public SegmentStatus getSegmentStatus() {
+    public FieldStatus getSegmentStatus() {
         return segmentStatus;
     }
 
