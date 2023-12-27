@@ -8,7 +8,7 @@ import java.awt.*;
 import java.net.URL;
 
 @Getter
-public enum FieldStatus
+public enum FieldObjectStatus
 {
 
     FOOD("food"),
@@ -22,7 +22,7 @@ public enum FieldStatus
     private Image image;
     private final String iconNameFormat="/img/%s.png";
 
-    FieldStatus(String iconName){
+    FieldObjectStatus(String iconName){
         loadImage(iconName);
     }
 

@@ -1,42 +1,45 @@
 package ru.igojig.snake;
 
 
-
+import lombok.Getter;
+import lombok.Setter;
 import ru.igojig.snake.body.BodyCell;
-import ru.igojig.snake.body.HeadStatus;
 import ru.igojig.snake.body.SnakeBody;
 import ru.igojig.snake.field.Bomb;
-import ru.igojig.snake.field.FieldStatus;
+import ru.igojig.snake.field.FieldObjectStatus;
 import ru.igojig.snake.field.Food;
 
 import java.util.List;
 
 public class Snake {
+    @Setter
     MoveStatus currentMoveStatus;
 
     Bomb bombs;
     Food foods;
     SnakeBody snakeBody;
 
+    @Getter
     GameStatus gameStatus;
 
+    @Getter
     int snakeLength;
     int width;
     int height;
     int foodCount;
     int bombCount;
 
-    boolean isEated=false;
+    boolean isEated = false;
 
 
     public Snake(int width, int height, int snakeLength, int foodCount, int bombCount) {
 
 
-       restart(width, height, snakeLength, foodCount, bombCount);
+        restart(width, height, snakeLength, foodCount, bombCount);
 
     }
 
-    public void restart(int width, int height, int snakeLength, int foodCount, int bombCount){
+    public void restart(int width, int height, int snakeLength, int foodCount, int bombCount) {
         gameStatus = GameStatus.PLAYED;
         currentMoveStatus = MoveStatus.RIGHT;
 
@@ -50,7 +53,6 @@ public class Snake {
         this.height = height;
         this.bombCount = bombCount;
         this.foodCount = foodCount;
-
 
 
         bombs.fillData(snakeBody);
@@ -70,17 +72,14 @@ public class Snake {
         return foods.getWorkField();
     }
 
-    public FieldStatus getBombStatus() {
-        return bombs.getFieldStatus();
+    public FieldObjectStatus getBombStatus() {
+        return bombs.getFieldObjectStatus();
     }
 
-    public FieldStatus getFoodStatus() {
-        return foods.getFieldStatus();
+    public FieldObjectStatus getFoodStatus() {
+        return foods.getFieldObjectStatus();
     }
 
-//    public List<Coord>[] getGameObjects() {
-//        return new List[]{bombs.workField, foods.workField};
-//    }
 
     public void move() {
 
@@ -92,62 +91,52 @@ public class Snake {
         }
 
 
-//        Coord new_coord = snakeBody.getNewHead();
-
-        FieldStatus head = FieldStatus.SNAKE_HEAD;
+        FieldObjectStatus headStatus = FieldObjectStatus.SNAKE_HEAD;
 
         if (!snakeBody.isInsideArea())
             gameStatus = GameStatus.OUT_OF_AREA;
 
         if (snakeBody.isBombed(bombs)) {
             gameStatus = GameStatus.BOMBED;
-            head = FieldStatus.SNAKE_HEAD_BOMBED;
+            headStatus = FieldObjectStatus.SNAKE_HEAD_BOMBED;
         }
 //            bombed=true;
 
 
         if (snakeBody.isSelfEat()) {
             gameStatus = GameStatus.SELF_EATED;
-            head = FieldStatus.SNAKE_HEAD_EATED;
+            headStatus = FieldObjectStatus.SNAKE_HEAD_EATED;
         }
 
         if (snakeBody.isFindFood((foods))) {
             foods.removeCell(snakeBody.getNewHead());
             foods.generateGameObject(snakeBody, foods, bombs);
             snakeBody.increaseLength();
-            isEated=true;
-            head = FieldStatus.SNAKE_HEAD_EATED;
+            snakeLength++;
+            isEated = true;
+            headStatus = FieldObjectStatus.SNAKE_HEAD_EATED;
         } else {
             snakeBody.moveEndOfSnake();
-            isEated=false;
+            isEated = false;
         }
 
         snakeBody.moveHeadOfSnake();
-        snakeBody.setHeadStatus(head);
+        snakeBody.setHeadStatus(headStatus);
 
-
-
-//        lock.unlock();
     }
 
-    public void setCurrentMoveStatus(MoveStatus currentMoveStatus) {
-//        queue.addLast(this.currentMoveStatus);
-        this.currentMoveStatus = currentMoveStatus;
-    }
-
-
-    public GameStatus getGameStatus() {
-        return gameStatus;
-    }
-
-    public int getSnakeLength() {
-        return snakeBody.getSnakeLength();
-    }
-
-//    public List<BodyCell> getSnake(){
-//         return snakeBody.getSnakeList();
+//    public void setCurrentMoveStatus(MoveStatus currentMoveStatus) {
+//        this.currentMoveStatus = currentMoveStatus;
 //    }
-public boolean isEated(){
-        return isEated;
-}
+
+
+//    public GameStatus getGameStatus() {
+//        return gameStatus;
+//    }
+
+//    public int getSnakeLength() {
+//        return snakeBody.getSnakeLength();
+//    }
+
+
 }

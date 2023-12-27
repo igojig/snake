@@ -6,7 +6,7 @@ public enum GameStatus{
     SELF_EATED("Вы съели сами себя!"),
     OUT_OF_AREA("Вы вышли за пределы поля");
 
-    String status;
+    final String status;
 
     GameStatus(String status){
         this.status=status;

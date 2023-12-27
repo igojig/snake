@@ -2,9 +2,10 @@ package ru.igojig.snake.body;
 
 
 
+import lombok.Getter;
 import ru.igojig.snake.Coord;
 import ru.igojig.snake.field.FieldObject;
-import ru.igojig.snake.field.FieldStatus;
+import ru.igojig.snake.field.FieldObjectStatus;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,15 +16,16 @@ public class SnakeBody {
     int width;
     int height;
 
+    @Getter
     int snakeLength;
 
     int currentX;
     int currentY;
 
+    @Getter
     LinkedList<BodyCell> snakeList;
 
     public SnakeBody(int snakeLength, int width, int height) {
-
         restart(snakeLength, width, height);
     }
 
@@ -41,10 +43,10 @@ public class SnakeBody {
         int x = width / 2 - snakeLength / 2;
 
         for (int i = 0; i < snakeLength; i++) {
-            snakeList.add(new BodyCell(x + i, y, FieldStatus.SNAKE_BODY));
+            snakeList.add(new BodyCell(x + i, y, FieldObjectStatus.SNAKE_BODY));
         }
-        snakeList.getLast().fieldStatus = FieldStatus.SNAKE_HEAD;
-        snakeList.getFirst().fieldStatus = FieldStatus.SNAKE_TAIL;
+        snakeList.getLast().fieldObjectStatus = FieldObjectStatus.SNAKE_HEAD;
+        snakeList.getFirst().fieldObjectStatus = FieldObjectStatus.SNAKE_TAIL;
 
 
         currentY = y;
@@ -79,9 +81,9 @@ public class SnakeBody {
     }
 
     public void moveHeadOfSnake() {
-        snakeList.getLast().fieldStatus = FieldStatus.SNAKE_BODY;
-        snakeList.add(new BodyCell(currentX, currentY, FieldStatus.SNAKE_HEAD));
-        snakeList.element().fieldStatus = FieldStatus.SNAKE_TAIL;
+        snakeList.getLast().fieldObjectStatus = FieldObjectStatus.SNAKE_BODY;
+        snakeList.add(new BodyCell(currentX, currentY, FieldObjectStatus.SNAKE_HEAD));
+        snakeList.getFirst().fieldObjectStatus = FieldObjectStatus.SNAKE_TAIL;
 
     }
 
@@ -111,16 +113,9 @@ public class SnakeBody {
         snakeLength++;
     }
 
-    public List<BodyCell> getSnakeList() {
-        return List.copyOf(snakeList);
-    }
 
-    public int getSnakeLength() {
-        return snakeLength;
-    }
-
-    public void setHeadStatus(FieldStatus fieldStatus) {
-        snakeList.getLast().setFieldStatus(fieldStatus);
+    public void setHeadStatus(FieldObjectStatus fieldObjectStatus) {
+        snakeList.getLast().setFieldObjectStatus(fieldObjectStatus);
     }
 
 }

@@ -21,8 +21,7 @@ public class Window extends JFrame implements Runnable {
     Timer timer;
 
     public Window() {
-//        super();
-        snake = new Snake(Main.FIELD_WIDTH, Main.FIELD_HEIGHT, Main.SNAKE_LENGTH, Main.FOOD_COUNT, Main.BOMB_COUNT);
+        snake = new Snake(Main.FIELD_WIDTH, Main.FIELD_HEIGHT, Main.SNAKE_START_LENGTH, Main.FOOD_COUNT, Main.BOMB_COUNT);
     }
 
     @Override
@@ -33,8 +32,8 @@ public class Window extends JFrame implements Runnable {
     }
 
     void restart() {
-        snake.restart(Main.FIELD_WIDTH, Main.FIELD_HEIGHT, Main.SNAKE_LENGTH, Main.FOOD_COUNT, Main.BOMB_COUNT);
-        timer.setDelay(Main.DELAY);
+        snake.restart(Main.FIELD_WIDTH, Main.FIELD_HEIGHT, Main.SNAKE_START_LENGTH, Main.FOOD_COUNT, Main.BOMB_COUNT);
+        timer.setDelay(Main.TIMER_DELAY);
     }
 
     void initPanel() {
@@ -44,64 +43,24 @@ public class Window extends JFrame implements Runnable {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
 
-//                Image image = snake.getBombStatus().getImage();
-//                g.setColor(c);
                 snake.getBombs().forEach(o -> {
-
                     int x = o.getX();
                     int y = o.getY();
-
                     g.drawImage(snake.getBombStatus().getImage(), x* Main.IMAGE_SIZE, y*Main.IMAGE_SIZE, this);
-
-//                    g.fillOval(x * Main.IMAGE_SIZE, y * Main.IMAGE_SIZE, Main.IMAGE_SIZE, Main.IMAGE_SIZE);
                 });
 
-//                image = snake.getFoodStatus().getImage();
-//                g.setColor(c);
                 snake.getFoods().forEach(o -> {
-
                     int x = o.getX();
                     int y = o.getY();
-
-//                    g.fillOval(x * Main.IMAGE_SIZE, y * Main.IMAGE_SIZE, Main.IMAGE_SIZE, Main.IMAGE_SIZE);
                     g.drawImage(snake.getFoodStatus().getImage(), x*Main.IMAGE_SIZE, y*Main.IMAGE_SIZE, this);
                 });
 
-//
-//
-//                com.company.com.company.com.company.snake.getArae().forEach(coordAreaStatusEntry -> {
-//                    Color c = coordAreaStatusEntry.getValue().getColor();
-//                    g.setColor(c);
-//                    int x = coordAreaStatusEntry.getKey().getX();
-//                    int y = coordAreaStatusEntry.getKey().getY();
-//
-//                    g.fillOval(x * com.company.Main.SIZE, y * com.company.Main.SIZE, com.company.Main.SIZE, com.company.Main.SIZE);
-//
-//                });
-
-
                 snake.getSnakeBody().forEach(o -> {
-                    Image image = o.getFieldStatus().getImage();
-//                    SegmentStatus statutus = segment.getSegmentStatus();
+                    Image image = o.getFieldObjectStatus().getImage();
                     int x = o.getX();
                     int y = o.getY();
-
-//                    g.setColor(color);
-//                    g.fillRect(x * Main.IMAGE_SIZE, y * Main.IMAGE_SIZE, Main.IMAGE_SIZE, Main.IMAGE_SIZE);
                     g.drawImage(image, x*Main.IMAGE_SIZE, y*Main.IMAGE_SIZE, this);
                 });
-
-//
-//                snake.getSnake().forEach(segment -> {
-//                    Color c = segment.getSegmentStatus().getColor();
-////                    SegmentStatus statutus = segment.getSegmentStatus();
-//                    int x = segment.getCoord().getX();
-//                    int y = segment.getCoord().getY();
-//
-//                    g.setColor(c);
-//                    g.fillRect(x * Main.SIZE, y * Main.SIZE, Main.SIZE, Main.SIZE);
-//
-//                });
 
                 g.setColor(Color.WHITE);
                 for (int i = 1; i < Main.FIELD_WIDTH; i++) {
@@ -111,10 +70,8 @@ public class Window extends JFrame implements Runnable {
                     g.drawLine(0, Main.IMAGE_SIZE * i, Main.IMAGE_SIZE * Main.FIELD_WIDTH, Main.IMAGE_SIZE * i);
                 }
 
-
-//
+                labelInfo.setText("Length #" + snake.getSnakeLength());
             }
-
         };
 
         panel.setPreferredSize(new Dimension(Main.FIELD_WIDTH * Main.IMAGE_SIZE, Main.FIELD_HEIGHT * Main.IMAGE_SIZE));
@@ -130,8 +87,7 @@ public class Window extends JFrame implements Runnable {
     }
 
     void initTimer() {
-        timer = new Timer(Main.DELAY, e -> {
-//                System.out.println("timer");
+        timer = new Timer(Main.TIMER_DELAY, e -> {
 
             snake.move();
 
@@ -143,8 +99,7 @@ public class Window extends JFrame implements Runnable {
                 case BOMBED:
                 case SELF_EATED:
                 case OUT_OF_AREA:
-//                        JOptionPane.showMessageDialog(panel, snake.getGameStatus().getStatus());
-                    answer = JOptionPane.showConfirmDialog(panel, snake.getGameStatus() + "\nНачать заново?", "Snake", JOptionPane.YES_NO_OPTION);
+                    answer = JOptionPane.showConfirmDialog(panel, snake.getGameStatus().getStatus() + "\nНачать заново?", "Snake", JOptionPane.YES_NO_OPTION);
 
                     switch (answer) {
                         case JOptionPane.YES_OPTION:
@@ -154,13 +109,8 @@ public class Window extends JFrame implements Runnable {
                         default:
                             timer.stop();
                     }
-
                     break;
             }
-
-//                if (snake.isEated()) {
-//                    timer.setDelay(timer.getDelay() - 10);
-//                }
         });
         timer.start();
 
@@ -191,12 +141,9 @@ public class Window extends JFrame implements Runnable {
         });
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        //  setLayout(new BorderLayout());
         setBackground(Color.BLACK);
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
     }
-
-
 }

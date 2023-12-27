@@ -6,7 +6,7 @@ public class Food extends FieldObject
 
 
     public Food(int width, int height, int dataCount) {
-        super(width, height, dataCount, FieldStatus.FOOD);
+        super(width, height, dataCount, FieldObjectStatus.FOOD);
     }
 
 

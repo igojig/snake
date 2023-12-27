@@ -4,7 +4,7 @@ public class Bomb extends FieldObject
 {
 
     public Bomb(int width, int height, int dataCount) {
-        super(width, height, dataCount, FieldStatus.BOMB);
+        super(width, height, dataCount, FieldObjectStatus.BOMB);
     }
 
 

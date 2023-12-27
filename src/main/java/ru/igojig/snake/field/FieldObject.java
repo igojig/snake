@@ -2,6 +2,7 @@ package ru.igojig.snake.field;
 
 
 
+import lombok.Getter;
 import ru.igojig.snake.Coord;
 import ru.igojig.snake.body.SnakeBody;
 
@@ -17,28 +18,24 @@ import java.util.concurrent.ThreadLocalRandom;
 
     int dataCount;
 
-    FieldStatus fieldStatus;
+    @Getter
+    FieldObjectStatus fieldObjectStatus;
 
+    @Getter
     List<Coord> workField;
 
-    FieldObject(int width, int height, int dataCount, FieldStatus fieldStatus){
+    FieldObject(int width, int height, int dataCount, FieldObjectStatus fieldObjectStatus){
 
-        restart(width, height, dataCount, fieldStatus);
+        restart(width, height, dataCount, fieldObjectStatus);
     }
 
-    void restart(int width, int height, int dataCount, FieldStatus fieldStatus){
+    void restart(int width, int height, int dataCount, FieldObjectStatus fieldObjectStatus){
         workField=new ArrayList<>();
         this.width =width;
         this.height =height;
         this.dataCount =dataCount;
-        this.fieldStatus=fieldStatus;
+        this.fieldObjectStatus = fieldObjectStatus;
 
-    }
-
-
-
-    public List<Coord> getWorkField(){
-        return List.copyOf(workField);
     }
 
     public boolean isEmpty(int x, int y){
@@ -71,9 +68,9 @@ import java.util.concurrent.ThreadLocalRandom;
         workField.removeIf(o->o.equals(coord));
     }
 
-    public FieldStatus getFieldStatus(){
-        return fieldStatus;
-    }
+//    public FieldObjectStatus getFieldStatus(){
+//        return fieldObjectStatus;
+//    }
 
 
 
