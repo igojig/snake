@@ -12,115 +12,115 @@ import java.util.List;
 
 public class SnakeBody {
 
-    int max_x_size;
-    int max_y_size;
+    int width;
+    int height;
 
-    int snake_length;
+    int snakeLength;
 
-    int new_x;
-    int new_y;
+    int currentX;
+    int currentY;
 
-    LinkedList<BodyCell> snake_list;
+    LinkedList<BodyCell> snakeList;
 
-    public SnakeBody(int snake_length, int max_x_size, int max_y_size) {
+    public SnakeBody(int snakeLength, int width, int height) {
 
-        restart(snake_length, max_x_size, max_y_size);
+        restart(snakeLength, width, height);
     }
 
-    public void restart(int snake_length, int max_x_size, int max_y_size){
-        this.max_x_size=max_x_size;
-        this.max_y_size=max_y_size;
-        this.snake_length=snake_length;
-        snake_list = new LinkedList<>();
+    public void restart(int snakeLength, int width, int height){
+        this.width =width;
+        this.height =height;
+        this.snakeLength =snakeLength;
+        snakeList = new LinkedList<>();
         generateSnake();
     }
 
 
     public void generateSnake() {
-        int y = max_y_size / 2;
-        int x = max_x_size / 2 - snake_length / 2;
+        int y = height / 2;
+        int x = width / 2 - snakeLength / 2;
 
-        for (int i = 0; i < snake_length; i++) {
-            snake_list.add(new BodyCell(x + i, y, FieldStatus.SNAKE_BODY));
+        for (int i = 0; i < snakeLength; i++) {
+            snakeList.add(new BodyCell(x + i, y, FieldStatus.SNAKE_BODY));
         }
-        snake_list.getLast().segmentStatus = FieldStatus.SNAKE_HEAD;
-        snake_list.getFirst().segmentStatus = FieldStatus.SNAKE_TAIL;
+        snakeList.getLast().fieldStatus = FieldStatus.SNAKE_HEAD;
+        snakeList.getFirst().fieldStatus = FieldStatus.SNAKE_TAIL;
 
 
-        new_y = y;
-        new_x = x + snake_length - 1;
+        currentY = y;
+        currentX = x + snakeLength - 1;
     }
 
     public boolean isEmpty(int x, int y) {
-        return snake_list.stream().noneMatch(o -> o.getX() == x && o.getY() == y);
+        return snakeList.stream().noneMatch(o -> o.getX() == x && o.getY() == y);
     }
 
 
     public void moveUp() {
-        new_y--;
+        currentY--;
     }
 
     public void moveDown() {
-        new_y++;
+        currentY++;
     }
 
     public void moveLeft() {
-        new_x--;
+        currentX--;
     }
 
     public void moveRight() {
-        new_x++;
+        currentX++;
     }
 
 
     public void moveEndOfSnake() {
-        snake_list.remove();
+        snakeList.remove();
 
     }
 
     public void moveHeadOfSnake() {
-        snake_list.getLast().segmentStatus = FieldStatus.SNAKE_BODY;
-        snake_list.add(new BodyCell(new_x, new_y, FieldStatus.SNAKE_HEAD));
-        snake_list.element().segmentStatus = FieldStatus.SNAKE_TAIL;
+        snakeList.getLast().fieldStatus = FieldStatus.SNAKE_BODY;
+        snakeList.add(new BodyCell(currentX, currentY, FieldStatus.SNAKE_HEAD));
+        snakeList.element().fieldStatus = FieldStatus.SNAKE_TAIL;
 
     }
 
     public Coord getNewHead() {
-        return new Coord(new_x, new_y);
+        return new Coord(currentX, currentY);
     }
 
     public boolean isInsideArea() {
-        return new_x >= 0 && new_x < max_x_size && new_y >= 0 && new_y < max_y_size;
+        return currentX >= 0 && currentX < width && currentY >= 0 && currentY < height;
     }
 
     public boolean isBombed(FieldObject fieldObject) {
-        return !fieldObject.isEmpty(new_x, new_y);
+        return !fieldObject.isEmpty(currentX, currentY);
     }
 
     public boolean isSelfEat() {
-        return snake_list.stream().anyMatch(o -> o.getX() == new_x && o.getY() == new_y);
+        return snakeList.stream().anyMatch(o -> o.getX() == currentX && o.getY() == currentY);
     }
 
     public boolean isFindFood(FieldObject fieldObject) {
 
-        return !fieldObject.isEmpty(new_x, new_y);
+        return !fieldObject.isEmpty(currentX, currentY);
 
     }
 
     public void increaseLength() {
-        snake_length++;
+        snakeLength++;
     }
 
     public List<BodyCell> getSnakeList() {
-        return List.copyOf(snake_list);
+        return List.copyOf(snakeList);
     }
 
     public int getSnakeLength() {
-        return snake_length;
+        return snakeLength;
     }
 
-//    public void setHeadStatus(HeadStatus headStatus) {
-//        snake_list.getLast().segmentStatus.setHeadStatus(headStatus);
-//    }
+    public void setHeadStatus(FieldStatus fieldStatus) {
+        snakeList.getLast().setFieldStatus(fieldStatus);
+    }
 
 }

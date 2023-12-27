@@ -1,30 +1,29 @@
 package ru.igojig.snake.body;
 
 
+import lombok.Data;
 import ru.igojig.snake.Coord;
 import ru.igojig.snake.field.FieldStatus;
-
+@Data
 public class BodyCell extends Coord {
-    FieldStatus segmentStatus;
+    FieldStatus fieldStatus;
 
     BodyCell(int x, int y){
         super(x,y);
-        segmentStatus=FieldStatus.SNAKE_BODY;
+        fieldStatus =FieldStatus.SNAKE_BODY;
     }
 
-    BodyCell(int x, int y, FieldStatus segmentStatus){
+    BodyCell(int x, int y, FieldStatus fieldStatus){
         super(x,y);
-        this.segmentStatus=segmentStatus;
+        this.fieldStatus = fieldStatus;
 
     }
 
-    BodyCell(Coord coord, FieldStatus segmentStatus){
+    BodyCell(Coord coord, FieldStatus fieldStatus){
         super(coord);
-        this.segmentStatus=segmentStatus;
+        this.fieldStatus = fieldStatus;
     }
 
-    public FieldStatus getSegmentStatus() {
-        return segmentStatus;
-    }
+
 
 }

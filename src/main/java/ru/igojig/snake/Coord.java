@@ -1,7 +1,9 @@
 package ru.igojig.snake;
 
-import java.util.Objects;
+import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+@NoArgsConstructor
 public class Coord {
    protected int x;
     protected int y;

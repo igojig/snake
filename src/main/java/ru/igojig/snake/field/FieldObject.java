@@ -12,25 +12,25 @@ import java.util.concurrent.ThreadLocalRandom;
 
  public class FieldObject {
 
-     int max_x;
-     int max_y;
+     int width;
+     int height;
 
-    int data_count;
+    int dataCount;
 
     FieldStatus fieldStatus;
 
     List<Coord> workField;
 
-    FieldObject(int max_x, int max_y, int data_count, FieldStatus fieldStatus){
+    FieldObject(int width, int height, int dataCount, FieldStatus fieldStatus){
 
-        restart(max_x, max_y, data_count, fieldStatus);
+        restart(width, height, dataCount, fieldStatus);
     }
 
-    void restart(int max_x, int max_y, int data_count, FieldStatus fieldStatus){
+    void restart(int width, int height, int dataCount, FieldStatus fieldStatus){
         workField=new ArrayList<>();
-        this.max_x=max_x;
-        this.max_y=max_y;
-        this.data_count=data_count;
+        this.width =width;
+        this.height =height;
+        this.dataCount =dataCount;
         this.fieldStatus=fieldStatus;
 
     }
@@ -47,7 +47,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
     public void fillData(SnakeBody snakeBody, FieldObject... fieldObjects){
         int i=0;
-        while (i<data_count){
+        while (i< dataCount){
                 generateGameObject(snakeBody, fieldObjects);
                 i++;
             }
@@ -56,8 +56,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
     public void generateGameObject(SnakeBody snakeBody, FieldObject... fieldObjects){
         while (true){
-            int x= ThreadLocalRandom.current().nextInt(max_x);
-            int y=ThreadLocalRandom.current().nextInt(max_y);
+            int x= ThreadLocalRandom.current().nextInt(width);
+            int y=ThreadLocalRandom.current().nextInt(height);
             if( snakeBody.isEmpty(x, y)
                     && Arrays.stream(fieldObjects).allMatch(o->o.isEmpty(x,y))){
                 workField.add(new Coord(x,y));

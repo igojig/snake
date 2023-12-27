@@ -10,12 +10,14 @@ import java.net.URL;
 @Getter
 public enum FieldStatus
 {
-//    EMPTY(Color.BLACK),
+
     FOOD("food"),
     BOMB("bomb"),
     SNAKE_BODY("snake-body"),
     SNAKE_HEAD("snake-head"),
-    SNAKE_TAIL("snake-tail");
+    SNAKE_TAIL("snake-tail"),
+    SNAKE_HEAD_EATED("snake-head-eated"),
+    SNAKE_HEAD_BOMBED("snake-head-bombed");
 
     private Image image;
     private final String iconNameFormat="/img/%s.png";
@@ -32,7 +34,4 @@ public enum FieldStatus
         image=new ImageIcon(resource).getImage().getScaledInstance(Main.IMAGE_SIZE, Main.IMAGE_SIZE, Image.SCALE_AREA_AVERAGING);
     }
 
-//    public Color getColor() {
-//        return color;
-//    }
 }

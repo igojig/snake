@@ -22,7 +22,7 @@ public class Window extends JFrame implements Runnable {
 
     public Window() {
 //        super();
-        snake = new Snake(Main.X, Main.Y, Main.SNAKE_LENGTH, Main.FOOD_COUNT, Main.BOMB_COUNT);
+        snake = new Snake(Main.FIELD_WIDTH, Main.FIELD_HEIGHT, Main.SNAKE_LENGTH, Main.FOOD_COUNT, Main.BOMB_COUNT);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class Window extends JFrame implements Runnable {
     }
 
     void restart() {
-        snake.restart(Main.X, Main.Y, Main.SNAKE_LENGTH, Main.FOOD_COUNT, Main.BOMB_COUNT);
+        snake.restart(Main.FIELD_WIDTH, Main.FIELD_HEIGHT, Main.SNAKE_LENGTH, Main.FOOD_COUNT, Main.BOMB_COUNT);
         timer.setDelay(Main.DELAY);
     }
 
@@ -81,7 +81,7 @@ public class Window extends JFrame implements Runnable {
 
 
                 snake.getSnakeBody().forEach(o -> {
-                    Image image = o.getSegmentStatus().getImage();
+                    Image image = o.getFieldStatus().getImage();
 //                    SegmentStatus statutus = segment.getSegmentStatus();
                     int x = o.getX();
                     int y = o.getY();
@@ -104,11 +104,11 @@ public class Window extends JFrame implements Runnable {
 //                });
 
                 g.setColor(Color.WHITE);
-                for (int i = 1; i < Main.X; i++) {
-                    g.drawLine((Main.IMAGE_SIZE * i), 0, Main.IMAGE_SIZE * i, Main.IMAGE_SIZE * Main.Y);
+                for (int i = 1; i < Main.FIELD_WIDTH; i++) {
+                    g.drawLine((Main.IMAGE_SIZE * i), 0, Main.IMAGE_SIZE * i, Main.IMAGE_SIZE * Main.FIELD_HEIGHT);
                 }
-                for (int i = 1; i < Main.Y; i++) {
-                    g.drawLine(0, Main.IMAGE_SIZE * i, Main.IMAGE_SIZE * Main.X, Main.IMAGE_SIZE * i);
+                for (int i = 1; i < Main.FIELD_HEIGHT; i++) {
+                    g.drawLine(0, Main.IMAGE_SIZE * i, Main.IMAGE_SIZE * Main.FIELD_WIDTH, Main.IMAGE_SIZE * i);
                 }
 
 
@@ -117,14 +117,14 @@ public class Window extends JFrame implements Runnable {
 
         };
 
-        panel.setPreferredSize(new Dimension(Main.X * Main.IMAGE_SIZE, Main.Y * Main.IMAGE_SIZE));
+        panel.setPreferredSize(new Dimension(Main.FIELD_WIDTH * Main.IMAGE_SIZE, Main.FIELD_HEIGHT * Main.IMAGE_SIZE));
 
         panel.setBackground(Color.GRAY);
         add(panel);
 
         panelInfo = new JPanel(new FlowLayout());
         labelInfo = new JLabel();
-        labelInfo.setText("Length #" + snake.getSnake_length());
+        labelInfo.setText("Length #" + snake.getSnakeLength());
         panelInfo.add(labelInfo);
         add(panelInfo, BorderLayout.SOUTH);
     }
@@ -136,13 +136,13 @@ public class Window extends JFrame implements Runnable {
             snake.move();
 
             Window.this.repaint();
-            labelInfo.setText("Length #" + snake.getSnake_length());
+            labelInfo.setText("Length #" + snake.getSnakeLength());
             int answer = -1;
 
             switch (snake.getGameStatus()) {
                 case BOMBED:
                 case SELF_EATED:
-                case OUT_OF_ARAE:
+                case OUT_OF_AREA:
 //                        JOptionPane.showMessageDialog(panel, snake.getGameStatus().getStatus());
                     answer = JOptionPane.showConfirmDialog(panel, snake.getGameStatus() + "\nНачать заново?", "Snake", JOptionPane.YES_NO_OPTION);
 

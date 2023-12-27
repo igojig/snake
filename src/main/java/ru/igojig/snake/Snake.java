@@ -20,34 +20,34 @@ public class Snake {
 
     GameStatus gameStatus;
 
-    int snake_length;
-    int max_x;
-    int max_y;
+    int snakeLength;
+    int width;
+    int height;
     int foodCount;
     int bombCount;
 
     boolean isEated=false;
 
 
-    public Snake(int max_x, int max_y, int snake_length, int foodCount, int bombCount) {
+    public Snake(int width, int height, int snakeLength, int foodCount, int bombCount) {
 
 
-       restart(max_x, max_y, snake_length, foodCount, bombCount);
+       restart(width, height, snakeLength, foodCount, bombCount);
 
     }
 
-    public void restart(int max_x, int max_y, int snake_length, int foodCount, int bombCount){
+    public void restart(int width, int height, int snakeLength, int foodCount, int bombCount){
         gameStatus = GameStatus.PLAYED;
         currentMoveStatus = MoveStatus.RIGHT;
 
-        snakeBody = new SnakeBody(snake_length, max_x, max_y);
-        bombs = new Bomb(max_x, max_y, bombCount);
-        foods = new Food(max_x, max_y, foodCount);
+        snakeBody = new SnakeBody(snakeLength, width, height);
+        bombs = new Bomb(width, height, bombCount);
+        foods = new Food(width, height, foodCount);
 
-        this.snake_length = snake_length;
+        this.snakeLength = snakeLength;
 
-        this.max_x = max_x;
-        this.max_y = max_y;
+        this.width = width;
+        this.height = height;
         this.bombCount = bombCount;
         this.foodCount = foodCount;
 
@@ -94,21 +94,21 @@ public class Snake {
 
 //        Coord new_coord = snakeBody.getNewHead();
 
-        HeadStatus headStatus = HeadStatus.NORMAL;
+        FieldStatus head = FieldStatus.SNAKE_HEAD;
 
         if (!snakeBody.isInsideArea())
-            gameStatus = GameStatus.OUT_OF_ARAE;
+            gameStatus = GameStatus.OUT_OF_AREA;
 
         if (snakeBody.isBombed(bombs)) {
             gameStatus = GameStatus.BOMBED;
-            headStatus = HeadStatus.BOMBED;
+            head = FieldStatus.SNAKE_HEAD_BOMBED;
         }
 //            bombed=true;
 
 
         if (snakeBody.isSelfEat()) {
             gameStatus = GameStatus.SELF_EATED;
-            headStatus = HeadStatus.SELF_EATED;
+            head = FieldStatus.SNAKE_HEAD_EATED;
         }
 
         if (snakeBody.isFindFood((foods))) {
@@ -116,14 +116,14 @@ public class Snake {
             foods.generateGameObject(snakeBody, foods, bombs);
             snakeBody.increaseLength();
             isEated=true;
-            headStatus = HeadStatus.EATED;
+            head = FieldStatus.SNAKE_HEAD_EATED;
         } else {
             snakeBody.moveEndOfSnake();
             isEated=false;
         }
 
         snakeBody.moveHeadOfSnake();
-//        snakeBody.setHeadStatus(headStatus);
+        snakeBody.setHeadStatus(head);
 
 
 
@@ -140,7 +140,7 @@ public class Snake {
         return gameStatus;
     }
 
-    public int getSnake_length() {
+    public int getSnakeLength() {
         return snakeBody.getSnakeLength();
     }
 
