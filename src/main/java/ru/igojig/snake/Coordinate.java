@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode
-public class Coord {
-    protected int x;
-    protected int y;
+public class Coordinate {
+    private int x;
+    private int y;
 }

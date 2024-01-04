@@ -1,4 +1,4 @@
-package ru.igojig.snake.field;
+package ru.igojig.snake.statuses;
 
 import lombok.Getter;
 import ru.igojig.Main;
@@ -8,7 +8,7 @@ import java.awt.*;
 import java.net.URL;
 
 @Getter
-public enum FieldObjectStatus
+public enum FieldStatus
 {
 
     FOOD("food"),
@@ -22,7 +22,7 @@ public enum FieldObjectStatus
     private Image image;
     private final String iconNameFormat="/img/%s.png";
 
-    FieldObjectStatus(String iconName){
+    FieldStatus(String iconName){
         loadImage(iconName);
     }
 
