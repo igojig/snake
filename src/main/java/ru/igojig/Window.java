@@ -2,8 +2,8 @@ package ru.igojig;
 
 
 
-import ru.igojig.snake.MoveStatus;
-import ru.igojig.snake.Snake;
+import ru.igojig.snake.statuses.MoveStatus;
+import ru.igojig.snake.Game;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent;
 
 public class Window extends JFrame implements Runnable {
 
-    Snake snake;
+    Game game;
     JPanel panel;
     JPanel panelInfo;
     JLabel labelInfo;
@@ -21,7 +21,7 @@ public class Window extends JFrame implements Runnable {
     Timer timer;
 
     public Window() {
-        snake = new Snake(Main.FIELD_WIDTH, Main.FIELD_HEIGHT, Main.SNAKE_START_LENGTH, Main.FOOD_COUNT, Main.BOMB_COUNT);
+        game = new Game(Main.FIELD_WIDTH, Main.FIELD_HEIGHT, Main.SNAKE_START_LENGTH, Main.FOOD_COUNT, Main.BOMB_COUNT);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class Window extends JFrame implements Runnable {
     }
 
     void restart() {
-        snake.restart(Main.FIELD_WIDTH, Main.FIELD_HEIGHT, Main.SNAKE_START_LENGTH, Main.FOOD_COUNT, Main.BOMB_COUNT);
+        game.restart(Main.FIELD_WIDTH, Main.FIELD_HEIGHT, Main.SNAKE_START_LENGTH, Main.FOOD_COUNT, Main.BOMB_COUNT);
         timer.setDelay(Main.TIMER_DELAY);
     }
 
@@ -43,34 +43,28 @@ public class Window extends JFrame implements Runnable {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
 
-                snake.getBombs().forEach(o -> {
+                game.getBombs().forEach(o -> {
                     int x = o.getX();
                     int y = o.getY();
-                    g.drawImage(snake.getBombStatus().getImage(), x* Main.IMAGE_SIZE, y*Main.IMAGE_SIZE, this);
+                    g.drawImage(game.getBombStatus().getImage(), x* Main.IMAGE_SIZE, y*Main.IMAGE_SIZE, this);
                 });
 
-                snake.getFoods().forEach(o -> {
+                game.getFoods().forEach(o -> {
                     int x = o.getX();
                     int y = o.getY();
-                    g.drawImage(snake.getFoodStatus().getImage(), x*Main.IMAGE_SIZE, y*Main.IMAGE_SIZE, this);
+                    g.drawImage(game.getFoodStatus().getImage(), x*Main.IMAGE_SIZE, y*Main.IMAGE_SIZE, this);
                 });
 
-                snake.getSnakeBody().forEach(o -> {
-                    Image image = o.getFieldObjectStatus().getImage();
-                    int x = o.getX();
-                    int y = o.getY();
+                game.getSnake().forEach(o -> {
+                    Image image = o.getFieldStatus().getImage();
+                    int x = o.getCoordinate().getX();
+                    int y = o.getCoordinate().getY();
                     g.drawImage(image, x*Main.IMAGE_SIZE, y*Main.IMAGE_SIZE, this);
                 });
 
-                g.setColor(Color.WHITE);
-                for (int i = 1; i < Main.FIELD_WIDTH; i++) {
-                    g.drawLine((Main.IMAGE_SIZE * i), 0, Main.IMAGE_SIZE * i, Main.IMAGE_SIZE * Main.FIELD_HEIGHT);
-                }
-                for (int i = 1; i < Main.FIELD_HEIGHT; i++) {
-                    g.drawLine(0, Main.IMAGE_SIZE * i, Main.IMAGE_SIZE * Main.FIELD_WIDTH, Main.IMAGE_SIZE * i);
-                }
+                drawGrid(g);
 
-                labelInfo.setText("Length #" + snake.getSnakeLength());
+                labelInfo.setText("Length: " + game.getSnakeLength());
             }
         };
 
@@ -81,25 +75,34 @@ public class Window extends JFrame implements Runnable {
 
         panelInfo = new JPanel(new FlowLayout());
         labelInfo = new JLabel();
-        labelInfo.setText("Length #" + snake.getSnakeLength());
+        labelInfo.setText("Length: " + game.getSnakeLength());
         panelInfo.add(labelInfo);
         add(panelInfo, BorderLayout.SOUTH);
+    }
+
+    private static void drawGrid(Graphics g) {
+        g.setColor(Color.WHITE);
+        for (int i = 1; i < Main.FIELD_WIDTH; i++) {
+            g.drawLine((Main.IMAGE_SIZE * i), 0, Main.IMAGE_SIZE * i, Main.IMAGE_SIZE * Main.FIELD_HEIGHT);
+        }
+        for (int i = 1; i < Main.FIELD_HEIGHT; i++) {
+            g.drawLine(0, Main.IMAGE_SIZE * i, Main.IMAGE_SIZE * Main.FIELD_WIDTH, Main.IMAGE_SIZE * i);
+        }
     }
 
     void initTimer() {
         timer = new Timer(Main.TIMER_DELAY, e -> {
 
-            snake.move();
+            game.move();
 
-            Window.this.repaint();
-            labelInfo.setText("Length #" + snake.getSnakeLength());
+            repaint();
             int answer = -1;
 
-            switch (snake.getGameStatus()) {
+            switch (game.getGameStatus()) {
                 case BOMBED:
                 case SELF_EATED:
                 case OUT_OF_AREA:
-                    answer = JOptionPane.showConfirmDialog(panel, snake.getGameStatus().getStatus() + "\nНачать заново?", "Snake", JOptionPane.YES_NO_OPTION);
+                    answer = JOptionPane.showConfirmDialog(panel, game.getGameStatus().getStatus() + "\nНачать заново?", "Snake", JOptionPane.YES_NO_OPTION);
 
                     switch (answer) {
                         case JOptionPane.YES_OPTION:
@@ -123,19 +126,10 @@ public class Window extends JFrame implements Runnable {
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_UP:
-                        snake.setCurrentMoveStatus(MoveStatus.UP);
-                        break;
-                    case KeyEvent.VK_DOWN:
-                        snake.setCurrentMoveStatus(MoveStatus.DOWN);
-                        break;
-                    case KeyEvent.VK_LEFT:
-                        snake.setCurrentMoveStatus(MoveStatus.LEFT);
-                        break;
-                    case KeyEvent.VK_RIGHT:
-                        snake.setCurrentMoveStatus(MoveStatus.RIGHT);
-                        break;
-
+                    case KeyEvent.VK_UP -> game.setCurrentMoveStatus(MoveStatus.UP);
+                    case KeyEvent.VK_DOWN -> game.setCurrentMoveStatus(MoveStatus.DOWN);
+                    case KeyEvent.VK_LEFT -> game.setCurrentMoveStatus(MoveStatus.LEFT);
+                    case KeyEvent.VK_RIGHT -> game.setCurrentMoveStatus(MoveStatus.RIGHT);
                 }
             }
         });

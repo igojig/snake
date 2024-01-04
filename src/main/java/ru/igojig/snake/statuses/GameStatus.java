@@ -1,4 +1,4 @@
-package ru.igojig.snake;
+package ru.igojig.snake.statuses;
 
 public enum GameStatus{
     PLAYED("Игра"),
